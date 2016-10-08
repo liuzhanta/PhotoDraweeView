@@ -10,6 +10,7 @@ import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.backends.pipeline.PipelineDraweeController;
@@ -86,10 +87,22 @@ public class MainActivity extends AppCompatActivity {
 
             final PhotoDraweeView photoDraweeView = (PhotoDraweeView) view.findViewById(R.id.photoDraweeView);
 
+            photoDraweeView.setOnPhotoTapListener(new OnPhotoTapListener() {
+                @Override
+                public void onPhotoTap(View view, float x, float y) {
+                    Toast.makeText(MainActivity.this, "onPhotoTap!", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+
             final Uri uri = Uri.parse(images.get(position));
+
+            //configuring Fresco ImageRequest
             ImageRequest request = ImageRequestBuilder.newBuilderWithSource(uri)
                     .build();
 
+
+            //configuring Fresco pipeline controller
             PipelineDraweeController controller = (PipelineDraweeController) Fresco.newDraweeControllerBuilder()
                     .setOldController(photoDraweeView.getController())
                     .setControllerListener(new BaseControllerListener<ImageInfo>() {
@@ -107,6 +120,8 @@ public class MainActivity extends AppCompatActivity {
                     .build();
 
             photoDraweeView.setController(controller);
+
+
             mViews.put(position, view);
             container.addView(view);
             return mViews.get(position);
