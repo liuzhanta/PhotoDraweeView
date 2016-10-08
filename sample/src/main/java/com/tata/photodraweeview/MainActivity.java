@@ -1,5 +1,6 @@
 package com.tata.photodraweeview;
 
+import android.content.Context;
 import android.graphics.drawable.Animatable;
 import android.net.Uri;
 import android.support.v4.view.PagerAdapter;
@@ -43,8 +44,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         Fresco.initialize(this);
+
         initViewPager();
     }
 
@@ -52,12 +53,14 @@ public class MainActivity extends AppCompatActivity {
         mViewPager = (HackyViewPager) findViewById(R.id.mViewPager);
         myPagerAdapter = new MyPagerAdapter(images);
         mViewPager.setAdapter(myPagerAdapter);
+        mViewPager.setOffscreenPageLimit(3);
     }
 
     private class MyPagerAdapter extends PagerAdapter {
 
         private List<String> images;
         private SparseArray<View> mViews;
+        private int screenWidth = 0 ;
 
         public MyPagerAdapter(List<String> images) {
             this.images = images;
@@ -78,9 +81,10 @@ public class MainActivity extends AppCompatActivity {
         public Object instantiateItem(ViewGroup container, int position) {
 
             final View view = getLayoutInflater().inflate(R.layout.adapter_item_view_larger_image, null);
-            final PhotoDraweeView photoDraweeView = (PhotoDraweeView) view.findViewById(R.id.photoDraweeView);
             final ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.progressbar_view_large_image);
             progressBar.setVisibility(View.VISIBLE);
+
+            final PhotoDraweeView photoDraweeView = (PhotoDraweeView) view.findViewById(R.id.photoDraweeView);
 
             final Uri uri = Uri.parse(images.get(position));
             ImageRequest request = ImageRequestBuilder.newBuilderWithSource(uri)
@@ -93,11 +97,15 @@ public class MainActivity extends AppCompatActivity {
                         public void onFinalImageSet(String id, ImageInfo imageInfo, Animatable animatable) {
                             super.onFinalImageSet(id, imageInfo, animatable);
                             progressBar.setVisibility(View.GONE);
-
+                            photoDraweeView.update(imageInfo.getWidth(), imageInfo.getHeight());
+                            if (imageInfo == null || photoDraweeView == null) {
+                                return;
+                            }
                         }
                     })
                     .setImageRequest(request)
                     .build();
+
             photoDraweeView.setController(controller);
             mViews.put(position, view);
             container.addView(view);
@@ -116,4 +124,5 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
 }

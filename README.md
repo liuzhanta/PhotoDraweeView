@@ -1,1 +1,5 @@
 # PhotoDraweeView
+PhotoDraweeView是基于PhotoView和Fresco的SimpleDraweeView进行改造的可以缩放的
+图片加载控件,你可以很简单的加载一张图片并且加上缩放手势。
+
+ 

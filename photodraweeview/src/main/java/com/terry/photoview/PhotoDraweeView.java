@@ -6,18 +6,16 @@ import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.View;
 
 import com.facebook.drawee.generic.GenericDraweeHierarchy;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 /**
- * Desc:PhotoDraweeView
+ * Desc:
  * Author: Terry
  * Date:2015-09-11
  */
 public class PhotoDraweeView extends SimpleDraweeView implements IAttacher {
-
     private Attacher mAttacher;
 
     public PhotoDraweeView(Context context, GenericDraweeHierarchy hierarchy) {
@@ -143,7 +141,7 @@ public class PhotoDraweeView extends SimpleDraweeView implements IAttacher {
     }
 
     @Override
-    public void setOnLongClickListener(View.OnLongClickListener listener) {
+    public void setOnLongClickListener(OnLongClickListener listener) {
         mAttacher.setOnLongClickListener(listener);
     }
 
