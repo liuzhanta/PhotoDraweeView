@@ -39,5 +39,7 @@ PhotoDraweeView是基于PhotoView和Fresco的SimpleDraweeView进行改造的可�
 Developed by
 ------------
 Name: Terry Liu
+
 E-mail: tata1989y@gmail.com 
+
 Subject: [PhotoDraweeView](https://github.com/liuzhanta/PhotoDraweeView)
