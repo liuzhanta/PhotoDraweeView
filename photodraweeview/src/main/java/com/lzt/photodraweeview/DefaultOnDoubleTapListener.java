@@ -1,4 +1,4 @@
-package com.terry.photoview;
+package com.lzt.photodraweeview;
 
 import android.graphics.RectF;
 import android.view.GestureDetector;

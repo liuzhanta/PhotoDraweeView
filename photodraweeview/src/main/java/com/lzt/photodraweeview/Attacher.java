@@ -1,4 +1,4 @@
-package com.terry.photoview;
+package com.lzt.photodraweeview;
 
 import android.content.Context;
 import android.graphics.Matrix;
@@ -31,20 +31,16 @@ public class Attacher implements IAttacher, View.OnTouchListener, OnScaleDragGes
     private final float[] mMatrixValues = new float[9];
     private final RectF mDisplayRect = new RectF();
     private final Interpolator mZoomInterpolator = new AccelerateDecelerateInterpolator();
-
+    private final Matrix mMatrix = new Matrix();
     private float mMinScale = IAttacher.DEFAULT_MIN_SCALE;
     private float mMidScale = IAttacher.DEFAULT_MID_SCALE;
     private float mMaxScale = IAttacher.DEFAULT_MAX_SCALE;
     private long mZoomDuration = IAttacher.ZOOM_DURATION;
-
     private ScaleDragDetector mScaleDragDetector;
     private GestureDetectorCompat mGestureDetector;
-
     private boolean mBlockParentIntercept = false;
     private boolean mAllowParentInterceptOnEdge = true;
     private int mScrollEdge = EDGE_BOTH;
-
-    private final Matrix mMatrix = new Matrix();
     private int mImageInfoHeight = -1, mImageInfoWidth = -1;
     private FlingRunnable mCurrentFlingRunnable;
     private WeakReference<DraweeView<GenericDraweeHierarchy>> mDraweeView;
@@ -72,6 +68,14 @@ public class Attacher implements IAttacher, View.OnTouchListener, OnScaleDragGes
         mGestureDetector.setOnDoubleTapListener(new DefaultOnDoubleTapListener(this));
     }
 
+    private static void checkZoomLevels(float minZoom, float midZoom, float maxZoom) {
+        if (minZoom >= midZoom) {
+            throw new IllegalArgumentException("MinZoom has to be less than MidZoom");
+        } else if (midZoom >= maxZoom) {
+            throw new IllegalArgumentException("MidZoom has to be less than MaxZoom");
+        }
+    }
+
     public void setOnDoubleTapListener(GestureDetector.OnDoubleTapListener newOnDoubleTapListener) {
         if (newOnDoubleTapListener != null) {
             this.mGestureDetector.setOnDoubleTapListener(newOnDoubleTapListener);
@@ -91,9 +95,21 @@ public class Attacher implements IAttacher, View.OnTouchListener, OnScaleDragGes
     }
 
     @Override
+    public void setMinimumScale(float minimumScale) {
+        checkZoomLevels(minimumScale, mMidScale, mMaxScale);
+        mMinScale = minimumScale;
+    }
+
+    @Override
 
     public float getMediumScale() {
         return mMidScale;
+    }
+
+    @Override
+    public void setMediumScale(float mediumScale) {
+        checkZoomLevels(mMinScale, mediumScale, mMaxScale);
+        mMidScale = mediumScale;
     }
 
     @Override
@@ -106,18 +122,6 @@ public class Attacher implements IAttacher, View.OnTouchListener, OnScaleDragGes
     public void setMaximumScale(float maximumScale) {
         checkZoomLevels(mMinScale, mMidScale, maximumScale);
         mMaxScale = maximumScale;
-    }
-
-    @Override
-    public void setMediumScale(float mediumScale) {
-        checkZoomLevels(mMinScale, mediumScale, mMaxScale);
-        mMidScale = mediumScale;
-    }
-
-    @Override
-    public void setMinimumScale(float minimumScale) {
-        checkZoomLevels(minimumScale, mMidScale, mMaxScale);
-        mMinScale = minimumScale;
     }
 
     @Override
@@ -178,18 +182,13 @@ public class Attacher implements IAttacher, View.OnTouchListener, OnScaleDragGes
     }
 
     @Override
-    public void setOnPhotoTapListener(OnPhotoTapListener listener) {
-        mPhotoTapListener = listener;
-    }
-
-    @Override
-    public void setOnViewTapListener(OnViewTapListener listener) {
-        mViewTapListener = listener;
-    }
-
-    @Override
     public OnPhotoTapListener getOnPhotoTapListener() {
         return mPhotoTapListener;
+    }
+
+    @Override
+    public void setOnPhotoTapListener(OnPhotoTapListener listener) {
+        mPhotoTapListener = listener;
     }
 
     @Override
@@ -198,18 +197,15 @@ public class Attacher implements IAttacher, View.OnTouchListener, OnScaleDragGes
     }
 
     @Override
+    public void setOnViewTapListener(OnViewTapListener listener) {
+        mViewTapListener = listener;
+    }
+
+    @Override
     public void update(int imageInfoWidth, int imageInfoHeight) {
         mImageInfoWidth = imageInfoWidth;
         mImageInfoHeight = imageInfoHeight;
         updateBaseMatrix();
-    }
-
-    private static void checkZoomLevels(float minZoom, float midZoom, float maxZoom) {
-        if (minZoom >= midZoom) {
-            throw new IllegalArgumentException("MinZoom has to be less than MidZoom");
-        } else if (midZoom >= maxZoom) {
-            throw new IllegalArgumentException("MidZoom has to be less than MaxZoom");
-        }
     }
 
     private int getViewWidth() {
@@ -439,6 +435,25 @@ public class Attacher implements IAttacher, View.OnTouchListener, OnScaleDragGes
         return handled;
     }
 
+    private void cancelFling() {
+        if (mCurrentFlingRunnable != null) {
+            mCurrentFlingRunnable.cancelFling();
+            mCurrentFlingRunnable = null;
+        }
+    }
+
+    private void postOnAnimation(View view, Runnable runnable) {
+        if (Build.VERSION.SDK_INT >= 16) {
+            view.postOnAnimation(runnable);
+        } else {
+            view.postDelayed(runnable, 16L);
+        }
+    }
+
+    protected void onDetachedFromWindow() {
+        cancelFling();
+    }
+
     private class AnimatedZoomRunnable implements Runnable {
         private final float mFocalX, mFocalY;
         private final long mStartTime;
@@ -543,24 +558,5 @@ public class Attacher implements IAttacher, View.OnTouchListener, OnScaleDragGes
                 postOnAnimation(draweeView, this);
             }
         }
-    }
-
-    private void cancelFling() {
-        if (mCurrentFlingRunnable != null) {
-            mCurrentFlingRunnable.cancelFling();
-            mCurrentFlingRunnable = null;
-        }
-    }
-
-    private void postOnAnimation(View view, Runnable runnable) {
-        if (Build.VERSION.SDK_INT >= 16) {
-            view.postOnAnimation(runnable);
-        } else {
-            view.postDelayed(runnable, 16L);
-        }
-    }
-
-    protected void onDetachedFromWindow() {
-        cancelFling();
     }
 }

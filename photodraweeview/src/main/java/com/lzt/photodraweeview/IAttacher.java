@@ -1,18 +1,19 @@
-package com.terry.photoview;
+package com.lzt.photodraweeview;
 
 import android.view.GestureDetector;
 import android.view.View;
 
+
 /**
  * ****************************************************************************
  * Copyright 2011, 2012 Chris Banes.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,15 +30,15 @@ public interface IAttacher {
 
     float getMinimumScale();
 
+    void setMinimumScale(float minimumScale);
+
     float getMediumScale();
+
+    void setMediumScale(float mediumScale);
 
     float getMaximumScale();
 
     void setMaximumScale(float maximumScale);
-
-    void setMediumScale(float mediumScale);
-
-    void setMinimumScale(float minimumScale);
 
     float getScale();
 
@@ -57,13 +58,13 @@ public interface IAttacher {
 
     void setOnLongClickListener(View.OnLongClickListener listener);
 
-    void setOnPhotoTapListener(OnPhotoTapListener listener);
-
-    void setOnViewTapListener(OnViewTapListener listener);
-
     OnPhotoTapListener getOnPhotoTapListener();
 
+    void setOnPhotoTapListener(OnPhotoTapListener listener);
+
     OnViewTapListener getOnViewTapListener();
+
+    void setOnViewTapListener(OnViewTapListener listener);
 
     void update(int imageInfoWidth, int imageInfoHeight);
 }

@@ -1,5 +1,26 @@
 apply plugin: 'com.android.library'
 
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'PhotoDraweeView'//在bintray网站中项目中填写的名称
+
+    publishedGroupId = 'com.lzt.photodraweeview'//一般为包名
+    libraryName = 'photodraweeview'//library名字需要和本地的lib module一致
+    artifact = 'photodraweeview'//同上
+
+    libraryDescription = 'A Photodraweeview which can zoom or scale your image simply.'//项目描述
+    libraryVersion = '1.0.1'//项目版本号,只需要在每次更新的时候填写
+
+    developerId = 'tata1989y'//开发者Id
+    developerName = 'Terry Liu'//开发者名称
+    developerEmail = 'tata1989y@gmail.com'//邮箱
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ['Apache-2.0']
+}
+
+
 android {
     compileSdkVersion 24
     buildToolsVersion "24.0.2"
@@ -29,4 +50,8 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.facebook.fresco:fresco:0.8.1'
     testCompile 'junit:junit:4.12'
+
 }
+
+apply from: 'https://raw.githubusercontent.com/attwellBrian/JCenter/master/installv1.gradle'
+apply from: 'https://raw.githubusercontent.com/attwellBrian/JCenter/master/bintrayv1.gradle'

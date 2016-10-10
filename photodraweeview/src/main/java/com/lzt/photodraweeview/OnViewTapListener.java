@@ -1,4 +1,4 @@
-package com.terry.photoview;
+package com.lzt.photodraweeview;
 
 
 import android.view.View;
@@ -15,8 +15,8 @@ public interface OnViewTapListener {
      * the user taps anywhere on the view, tapping on 'whitespace' will not be ignored.
      *
      * @param view - View the user tapped.
-     * @param x - where the user tapped from the left of the View.
-     * @param y - where the user tapped from the top of the View.
+     * @param x    - where the user tapped from the left of the View.
+     * @param y    - where the user tapped from the top of the View.
      */
     void onViewTap(View view, float x, float y);
 }

@@ -1,4 +1,4 @@
-package com.terry.photoview;
+package com.lzt.photodraweeview;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 
 import com.facebook.drawee.generic.GenericDraweeHierarchy;
 import com.facebook.drawee.view.SimpleDraweeView;
+
 
 /**
  * Desc:
@@ -77,23 +78,23 @@ public class PhotoDraweeView extends SimpleDraweeView implements IAttacher {
     }
 
     @Override
-    public float getMediumScale() {
-        return mAttacher.getMediumScale();
-    }
-
-    @Override
-    public float getMaximumScale() {
-        return mAttacher.getMaximumScale();
-    }
-
-    @Override
     public void setMinimumScale(float minimumScale) {
         mAttacher.setMinimumScale(minimumScale);
     }
 
     @Override
+    public float getMediumScale() {
+        return mAttacher.getMediumScale();
+    }
+
+    @Override
     public void setMediumScale(float mediumScale) {
         mAttacher.setMediumScale(mediumScale);
+    }
+
+    @Override
+    public float getMaximumScale() {
+        return mAttacher.getMaximumScale();
     }
 
     @Override
@@ -145,22 +146,22 @@ public class PhotoDraweeView extends SimpleDraweeView implements IAttacher {
         mAttacher.setOnLongClickListener(listener);
     }
 
-    public void setOnPhotoTapListener(OnPhotoTapListener listener) {
-        mAttacher.setOnPhotoTapListener(listener);
-    }
-
-    public void setOnViewTapListener(OnViewTapListener listener) {
-        mAttacher.setOnViewTapListener(listener);
-    }
-
     @Override
     public OnPhotoTapListener getOnPhotoTapListener() {
         return mAttacher.getOnPhotoTapListener();
     }
 
+    public void setOnPhotoTapListener(OnPhotoTapListener listener) {
+        mAttacher.setOnPhotoTapListener(listener);
+    }
+
     @Override
     public OnViewTapListener getOnViewTapListener() {
         return mAttacher.getOnViewTapListener();
+    }
+
+    public void setOnViewTapListener(OnViewTapListener listener) {
+        mAttacher.setOnViewTapListener(listener);
     }
 
     @Override
