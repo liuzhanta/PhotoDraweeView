@@ -2,6 +2,14 @@
 PhotoDraweeView是基于PhotoView和Fresco的SimpleDraweeView进行改造的可以缩放的
 图片加载控件,你可以很简单的加载一张图片并且加上缩放手势。
 
+Getting started
+---------------
+Add the PhotoDraweeView dependency to your build.gradle.
+    
+    dependencies {
+        compile 'com.lzt.photodraweeview:photodraweeview:1.0.1''
+    }
+
 # Screenshot
 ![GitHub set up](https://github.com/liuzhanta/PhotoDraweeView/blob/master/screen_shot.gif)
 
